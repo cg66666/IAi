@@ -3,7 +3,7 @@
  * @Author: cg
  * @Date: 2026-02-24 22:12:47
  * @LastEditors: cg
- * @LastEditTime: 2026-03-02 17:05:00
+ * @LastEditTime: 2026-03-02 18:08:37
  */
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Scrollbars from 'react-custom-scrollbars'
@@ -258,7 +258,7 @@ const ChatContent: React.FC<IProps> = ({ setTitle }) => {
   }, [curChatId, isAnonymity])
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
       {/* <div className={styles.head}>{title}</div> */}
       {/* 消息记录区域，手工纸浆质感 */}
       <div className={styles.chatMessages} id="chatMessages">

@@ -3,9 +3,10 @@
  * @Author: cg
  * @Date: 2026-02-24 22:12:47
  * @LastEditors: cg
- * @LastEditTime: 2026-03-02 11:30:08
+ * @LastEditTime: 2026-03-02 18:32:08
  */
 import React from 'react'
+import Scrollbars from 'react-custom-scrollbars'
 
 import { useChat, useLoginStore } from '@/store'
 
@@ -33,7 +34,7 @@ const Menu: React.FC<IProps> = ({ isCollapsed = false, onToggleCollapse }) => {
         </div>
 
         {isAnonymity ? (
-          <button title="登录" onClick={toLogin} className={styles.emptyText}>
+          <button title="登录" className={styles.emptyText}>
             请先登录以查看历史记录
           </button>
         ) : (
@@ -45,17 +46,20 @@ const Menu: React.FC<IProps> = ({ isCollapsed = false, onToggleCollapse }) => {
                 {!isCollapsed && <span className={styles.text}>新对话</span>}
               </button>
             </div>
+
             <div className={styles.historyList}>
-              {historyList.map((item) => (
-                <div
-                  key={item.chatId}
-                  className={`${styles.historyItem} ${curChatId === item.chatId ? styles.active : ''}`}
-                  onClick={() => setCurChatId(item.chatId)}
-                  title="hehe"
-                >
-                  {item.title}
-                </div>
-              ))}
+              <Scrollbars>
+                {historyList.map((item) => (
+                  <div
+                    key={item.chatId}
+                    className={`${styles.historyItem} ${curChatId === item.chatId ? styles.active : ''}`}
+                    onClick={() => setCurChatId(item.chatId)}
+                    title="hehe"
+                  >
+                    {item.title}
+                  </div>
+                ))}
+              </Scrollbars>
             </div>
           </>
         )}
@@ -64,12 +68,12 @@ const Menu: React.FC<IProps> = ({ isCollapsed = false, onToggleCollapse }) => {
         <div className={styles.loginSection} id="loginSection">
           {isAnonymity ? (
             // 未登录：显示登录按钮
-            <button className={styles.loginBtn} onClick={toLogin}>
+            <button style={{ flex: 1 }} className={styles.loginBtn} onClick={toLogin}>
               <span>{isCollapsed ? '🔑' : '🔨 登录 / 注册'}</span>
             </button>
           ) : (
             // 已登录：显示用户卡片
-            <div className={styles.userProfile}>
+            <div style={{ flex: 1 }} className={styles.userProfile}>
               <div className={styles.userAvatar}>{account.charAt(0) || '匠'}</div>
               {!isCollapsed && (
                 <span className={styles.userName} title={account}>

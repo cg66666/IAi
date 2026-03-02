@@ -46,7 +46,6 @@
     background: radial-gradient(circle at 50% 50%, rgba(146, 64, 14, 0.25) 0%, transparent 80%);
     border-radius: 20px;
     box-shadow: inset 0 0 20px rgba(150, 80, 20, 0.15);
-    cursor: pointer;
   }
 }
 
@@ -193,6 +192,7 @@
 
   .historyList {
     display: none;
+    flex: 1;
   }
 
   .loginSection {
@@ -225,54 +225,64 @@
 .historyList {
   flex: 1;
   overflow-y: auto;
-  padding: 10px 16px 24px 16px;
+  padding: 10px 0 24px 0;
   display: flex;
   flex-direction: column;
   gap: 14px;
-}
+  flex: 1;
+  overflow-y: hidden;
+  width: 100%;
+  .historyItem {
+    // margin-right: 10%;
+    padding: 14px 18px;
+    background: #fcf3e6;
+    border-radius: 30px 12px 30px 12px; /* 完全不规则，像手撕纸条 */
+    font-size: 1rem;
+    color: #3e1f0e;
+    border: 1px solid #e7b88b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: all 0.18s;
+    cursor: pointer;
+    box-shadow: 4px 5px 0 #c99a6b;
+    font-family: 'Georgia', serif;
+    background-image: linear-gradient(145deg, #fff2d8 0%, #fce5c7 100%);
+    transform: rotate(0.2deg);
+    position: relative;
+    margin-bottom: 20px;
+    // width: 200px;
+    width: 84%;
+    margin-left: 6%;
+    margin-bottom: 20px;
+    // margin: 0 6% 20px;
+    &:hover {
+      background: #fce5c1;
+      transform: scale(1.01) rotate(-0.3deg);
+      box-shadow: 6px 7px 0 #b87c4b;
+      border-color: #b45309;
+    }
 
-.historyItem {
-  padding: 14px 18px;
-  background: #fcf3e6;
-  border-radius: 30px 12px 30px 12px; /* 完全不规则，像手撕纸条 */
-  font-size: 1rem;
-  color: #3e1f0e;
-  border: 1px solid #e7b88b;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  transition: all 0.18s;
-  cursor: pointer;
-  box-shadow: 4px 5px 0 #c99a6b;
-  font-family: 'Georgia', serif;
-  background-image: linear-gradient(145deg, #fff2d8 0%, #fce5c7 100%);
-  transform: rotate(0.2deg);
-  position: relative;
-
-  &:hover {
-    background: #fce5c1;
-    transform: scale(1.01) rotate(-0.3deg);
-    box-shadow: 6px 7px 0 #b87c4b;
-    border-color: #b45309;
-  }
-
-  &.active {
-    background: #e9c49a; /* 深陶土色，明显区别于默认 */
-    border: 2px solid #b45309; /* 加粗边框，烧制褐色 */
-    color: #271505; /* 更深沉的文字色 */
-    box-shadow:
-      6px 8px 0 #8b5a2b,
-      /* 右侧厚重阴影，立起感觉 */ inset 0 0 0 3px #fef1d6; /* 内嵌亮边，仿手刻凹印 */
-    transform: scale(1.02) rotate(-0.5deg);
-    font-weight: 600; /* 加粗文字 */
-    text-shadow: 1px 1px 0 #fee3b8; /* 浅色压印 */
-    border-left-width: 5px; /* 左侧加重强调 */
-    z-index: 3;
+    &.active {
+      background: #e9c49a; /* 深陶土色，明显区别于默认 */
+      border: 2px solid #b45309; /* 加粗边框，烧制褐色 */
+      color: #271505; /* 更深沉的文字色 */
+      box-shadow:
+        6px 8px 0 #8b5a2b,
+        /* 右侧厚重阴影，立起感觉 */ inset 0 0 0 3px #fef1d6; /* 内嵌亮边，仿手刻凹印 */
+      transform: scale(1.02) rotate(-0.5deg);
+      font-weight: 600; /* 加粗文字 */
+      text-shadow: 1px 1px 0 #fee3b8; /* 浅色压印 */
+      border-left-width: 5px; /* 左侧加重强调 */
+      z-index: 3;
+    }
   }
 }
 
 .loginSection {
-  padding: 29.5px 16px 29.5px 16px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px 0 20px;
   border-top: 3px double #b88a5d; /* 双线缝制感 */
   background: #f5e2ce;
   margin-top: auto; /* 推到底部 */
@@ -283,6 +293,7 @@
     rgba(245, 158, 11, 0.05) 0%,
     transparent 50%
   );
+  height: 115px;
 }
 
 .loginBtn {
@@ -475,6 +486,11 @@
 
   .mobileToggleBtn {
     display: none !important;
+  }
+  &.collapsed {
+    .userAvatar {
+      display: none;
+    }
   }
 }
 
