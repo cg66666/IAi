@@ -3,7 +3,7 @@
  * @Author: cg
  * @Date: 2026-02-24 22:12:47
  * @LastEditors: cg
- * @LastEditTime: 2026-02-28 16:45:29
+ * @LastEditTime: 2026-03-02 11:30:16
  */
 import React from 'react'
 
@@ -16,7 +16,7 @@ interface IProps {
   onToggleSidebar: () => void
 }
 
-const Content: React.FC<IProps> = ({ isSidebarCollapsed, onToggleSidebar }) => {
+const Content: React.FC<IProps> = ({ onToggleSidebar }) => {
   return (
     <main className={styles.mainChat} id="mainChat">
       <div className={styles.chatContainer}>

@@ -3,7 +3,7 @@
  * @Author: cg
  * @Date: 2026-02-18 00:54:03
  * @LastEditors: cg
- * @LastEditTime: 2026-03-02 11:25:42
+ * @LastEditTime: 2026-03-02 11:31:09
  */
 import js from '@eslint/js'
 import globals from 'globals'
@@ -56,10 +56,9 @@ export default defineConfig([
         }
       ],
       'simple-import-sort/exports': 'error',
-      '@typescript-eslint/no-unused-vars': 'off',
-      'react-hooks/set-state-in-effect': 'off',
+      // 'react-hooks/set-state-in-effect': 'off',
       'react-hooks/exhaustive-deps': 'off',
-      'simple-import-sort/exports': 'off',
+      // 'simple-import-sort/exports': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/ban-ts-comment': 'off'
     },

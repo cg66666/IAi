@@ -3,18 +3,14 @@
  * @Author: cg
  * @Date: 2026-02-18 10:19:00
  * @LastEditors: cg
- * @LastEditTime: 2026-02-25 12:26:45
+ * @LastEditTime: 2026-03-02 11:29:11
  */
 import React, { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 
 import { useLoginStore } from '@/store'
 
-interface LayoutProps {
-  children?: React.ReactNode
-}
-
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC = () => {
   const { checkLogin } = useLoginStore()
 
   useEffect(() => {

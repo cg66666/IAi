@@ -3,7 +3,7 @@
  * @Author: cg
  * @Date: 2024-08-18 15:40:54
  * @LastEditors: cg
- * @LastEditTime: 2026-03-01 02:28:35
+ * @LastEditTime: 2026-03-02 11:28:53
  */
 import { notification } from 'antd'
 import axios, { AxiosError, type AxiosRequestConfig, type AxiosResponse } from 'axios'
@@ -56,7 +56,7 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   (resp: AxiosResponse) => {
-    const { data: _data, status } = resp
+    const { data: _data } = resp
 
     const { code, msg } = _data
     if (code === '00000') return { successful: true, ..._data }

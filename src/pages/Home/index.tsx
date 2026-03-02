@@ -3,11 +3,10 @@
  * @Author: cg
  * @Date: 2026-02-18 01:12:37
  * @LastEditors: cg
- * @LastEditTime: 2026-03-01 11:28:49
+ * @LastEditTime: 2026-03-02 11:31:46
  */
 import React, { useEffect, useState } from 'react'
 
-import { post } from '@/ajax'
 import { useChat, useLoginStore } from '@/store'
 
 import Content from './components/Content'

@@ -3,14 +3,13 @@
  * @Author: cg
  * @Date: 2024-11-20 16:16:46
  * @LastEditors: cg
- * @LastEditTime: 2026-02-28 11:53:10
+ * @LastEditTime: 2026-03-02 11:29:48
  */
 import { notification } from 'antd'
 import { nanoid } from 'nanoid'
 import { create } from 'zustand'
 
 import { get as Get, post } from '@/ajax'
-import { defaultComponentConfig } from '@/components/default'
 import { getCookie, getQueryParams } from '@/utils'
 
 interface IState {

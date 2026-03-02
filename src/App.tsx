@@ -3,9 +3,8 @@
  * @Author: cg
  * @Date: 2026-02-18 13:35:00
  * @LastEditors: cg
- * @LastEditTime: 2026-02-25 12:26:29
+ * @LastEditTime: 2026-03-02 11:28:35
  */
-import { useEffect } from 'react'
 import { RouterProvider } from 'react-router-dom'
 
 import router from './routes/router'

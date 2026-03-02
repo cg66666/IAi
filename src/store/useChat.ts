@@ -3,16 +3,11 @@
  * @Author: cg
  * @Date: 2024-11-20 16:16:46
  * @LastEditors: cg
- * @LastEditTime: 2026-03-01 11:29:03
+ * @LastEditTime: 2026-03-02 11:32:04
  */
-import { notification } from 'antd'
-import { nanoid } from 'nanoid'
 import { create } from 'zustand'
 
-import { get as Get, post } from '@/ajax'
-import { defaultComponentConfig } from '@/components/default'
-// import { type ConversationItem } from '@/pages/Home'
-import { getCookie, getQueryParams } from '@/utils'
+import { post } from '@/ajax'
 
 export interface ConversationItem {
   /** 主键 ID */
@@ -36,7 +31,7 @@ interface IState {
   setHistory: (list: ConversationItem[]) => void
 }
 
-export const useChat = create<IState>((set, get) => ({
+export const useChat = create<IState>((set) => ({
   curChatId: '',
   historyList: [],
   setCurChatId: (curChatId) => {

@@ -26,7 +26,6 @@
     "@types/react-custom-scrollbars": "^4.0.13",
     "antd": "^6.3.0",
     "axios": "^1.13.5",
-    "ds-markdown": "^1.1.0",
     "eslint-config-prettier": "^10.1.8",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",

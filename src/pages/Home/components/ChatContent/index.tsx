@@ -3,14 +3,12 @@
  * @Author: cg
  * @Date: 2026-02-24 22:12:47
  * @LastEditors: cg
- * @LastEditTime: 2026-03-02 11:25:03
+ * @LastEditTime: 2026-03-02 11:30:50
  */
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Scrollbars from 'react-custom-scrollbars'
-import { flushSync } from 'react-dom'
 
 import { Spin } from 'antd'
-import DsMarkdown from 'ds-markdown'
 import { marked } from 'marked'
 import { nanoid } from 'nanoid'
 
