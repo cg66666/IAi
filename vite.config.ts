@@ -3,7 +3,7 @@
  * @Author: cg
  * @Date: 2026-02-18 00:54:03
  * @LastEditors: cg
- * @LastEditTime: 2026-03-02 15:40:38
+ * @LastEditTime: 2026-03-02 15:51:42
  */
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
@@ -14,6 +14,7 @@ import { defineConfig, loadEnv } from 'vite'
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   return {
+    base: `/${env.VITE_PREFIX}/`,
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
