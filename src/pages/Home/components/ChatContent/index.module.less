@@ -176,7 +176,7 @@ pre {
 
 /* ----- 输入区域 — 手作工作台边沿 ----- */
 .inputArea {
-  padding: 22px 28px 28px 28px;
+  padding: 22px 28px 25px 28px;
   background: #f5e8d4;
   border-top: 4px solid #d6a47a; /* 粗陶边 */
   display: flex;
@@ -184,6 +184,8 @@ pre {
   align-items: flex-end;
   box-shadow: 0 -8px 12px rgba(150, 70, 20, 0.06);
   position: relative;
+  align-items: center;
+
   // min-height: 00px;
   &::before {
     background: rgba(999, 999, 999, 0.5);
@@ -201,19 +203,84 @@ pre {
     font-style: italic;
     font-family: 'Georgia', serif;
   }
+  .inputWrapper {
+    flex: 1;
+    background: #fff5e6;
+    border: 3px solid #bd8a5a;
+    border-radius: 50px 8px 50px 8px;
+    padding: 8px 18px 8px 24px;
+    transition:
+      border 0.2s,
+      box-shadow 0.2s;
+    box-shadow:
+      inset 2px 2px 10px #eddbc5,
+      4px 5px 0 #936f48;
+    min-width: 0;
+    max-height: 154px;
+    &:focus-within {
+      border-color: #b45309;
+      box-shadow:
+        inset 0 0 0 2px #fde6c4,
+        5px 7px 0 #7a4a25;
+      background: #fffaf2;
+    }
+    .textarea {
+      width: 100%;
+      border: none;
+      background: transparent;
+      resize: none;
+      font-size: 1.05rem;
+      font-family: 'Georgia', serif;
+      padding: 12px 12px 0 12px;
+      min-height: 40px;
+      outline: none;
+      color: #3b250e;
+      scrollbar-width: none;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+  }
 
-  // &::after {
-  //   content: '';
-  //   position: absolute;
-  //   top: -8px;
-  //   left: 40px;
-  //   width: 140px;
-  //   height: 10px;
-  //   background: #dc2626;
-  //   opacity: 0.2;
-  //   border-radius: 10px;
-  //   filter: blur(4px);
-  // }
+  .btn {
+    background: #fde4c2;
+    border: 2px solid #9c641c;
+    border-radius: 40% 20% 40% 20%;
+    padding: 12px 24px;
+    font-size: 1rem;
+    color: #4f2e10;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+    box-shadow: 5px 5px 0 #bb7a44;
+    white-space: nowrap;
+    font-family: 'Georgia', serif;
+    background-image: radial-gradient(circle at 30% 35%, #fef3c7, #fad19e);
+    transform: rotate(-0.3deg);
+
+    &.send {
+      background: #92400e; /* 深邃褐 */
+      border-color: #6f3212;
+      color: #fef1d6;
+      padding: 8px 28px;
+      flex-shrink: 0;
+      box-shadow: 6px 6px 0 #5f3419;
+      background-image: linear-gradient(145deg, #9f541f, #803b0d);
+      text-shadow: 0 1px 2px #3f1c05;
+
+      &:hover:not(:disabled) {
+        background: #ae551c;
+        transform: scale(0.97) rotate(0.3deg);
+        box-shadow: 3px 3px 0 #572e13;
+      }
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      filter: grayscale(20%);
+    }
+  }
 }
 .totalConsume {
   // width: 100%;
@@ -226,84 +293,6 @@ pre {
   text-align: right;
   font-style: italic;
   font-family: 'Georgia', serif;
-}
-.inputWrapper {
-  flex: 1;
-  background: #fff5e6;
-  border: 3px solid #bd8a5a;
-  border-radius: 50px 8px 50px 8px;
-  padding: 8px 18px 8px 24px;
-  transition:
-    border 0.2s,
-    box-shadow 0.2s;
-  box-shadow:
-    inset 2px 2px 10px #eddbc5,
-    4px 5px 0 #936f48;
-  min-width: 0;
-  max-height: 154px;
-  &:focus-within {
-    border-color: #b45309;
-    box-shadow:
-      inset 0 0 0 2px #fde6c4,
-      5px 7px 0 #7a4a25;
-    background: #fffaf2;
-  }
-  .textarea {
-    width: 100%;
-    border: none;
-    background: transparent;
-    resize: none;
-    font-size: 1.05rem;
-    font-family: 'Georgia', serif;
-    padding: 12px 12px 0 12px;
-    min-height: 40px;
-    outline: none;
-    color: #3b250e;
-    scrollbar-width: none;
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  }
-}
-
-.btn {
-  background: #fde4c2;
-  border: 2px solid #9c641c;
-  border-radius: 40% 20% 40% 20%;
-  padding: 12px 24px;
-  font-size: 1rem;
-  color: #4f2e10;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-weight: 500;
-  box-shadow: 5px 5px 0 #bb7a44;
-  white-space: nowrap;
-  font-family: 'Georgia', serif;
-  background-image: radial-gradient(circle at 30% 35%, #fef3c7, #fad19e);
-  transform: rotate(-0.3deg);
-
-  &.send {
-    background: #92400e; /* 深邃褐 */
-    border-color: #6f3212;
-    color: #fef1d6;
-    padding: 12px 32px;
-    flex-shrink: 0;
-    box-shadow: 6px 6px 0 #5f3419;
-    background-image: linear-gradient(145deg, #9f541f, #803b0d);
-    text-shadow: 0 1px 2px #3f1c05;
-
-    &:hover:not(:disabled) {
-      background: #ae551c;
-      transform: scale(0.97) rotate(0.3deg);
-      box-shadow: 3px 3px 0 #572e13;
-    }
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    filter: grayscale(20%);
-  }
 }
 
 @keyframes handRise {
@@ -318,23 +307,17 @@ pre {
 }
 
 /* 移动端适配 */
-@media (max-width: 700px) {
-  .inputArea {
-    padding: 16px 18px 22px 18px;
-    gap: 10px;
-  }
+// @media (max-width: 700px) {
+//   .inputArea {
+//     padding: 16px 18px 22px 18px;
+//     gap: 10px;
+//   }
 
-  .btn.send {
-    padding: 12px 22px;
-  }
+//   .btn.send {
+//     padding: 12px 22px;
+//   }
 
-  .chatHeader h2 {
-    font-size: 1.3rem;
-  }
-}
-
-:global {
-  .ds-markdown {
-    background: transparent;
-  }
-}
+//   .chatHeader h2 {
+//     font-size: 1.3rem;
+//   }
+// }

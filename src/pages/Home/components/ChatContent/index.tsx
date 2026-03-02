@@ -3,7 +3,7 @@
  * @Author: cg
  * @Date: 2026-02-24 22:12:47
  * @LastEditors: cg
- * @LastEditTime: 2026-03-02 11:30:50
+ * @LastEditTime: 2026-03-02 15:23:21
  */
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Scrollbars from 'react-custom-scrollbars'
@@ -16,8 +16,11 @@ import { post } from '@/ajax'
 import { useChat, useLoginStore } from '@/store'
 import { getCookie } from '@/utils'
 
-import 'ds-markdown/style.css'
 import styles from './index.module.less'
+
+interface IProps {
+  setTitle: React.Dispatch<React.SetStateAction<string>>
+}
 
 interface Message {
   role: 'user' | 'system'
@@ -25,7 +28,7 @@ interface Message {
   tokens?: string
 }
 
-const ChatContent: React.FC = () => {
+const ChatContent: React.FC<IProps> = ({ setTitle }) => {
   const { setCurChatId, curChatId, historyList, getHistory } = useChat()
   const { isAnonymity } = useLoginStore()
   const [messageList, setMessageList] = useState<Message[]>([])
@@ -55,7 +58,7 @@ const ChatContent: React.FC = () => {
     return res
   }, [messageList])
 
-  const [title, setTitle] = useState('')
+  // const [title, setTitle] = useState('')
 
   // const curTitle = useMemo(() => {
   //   if (!curChatId) return ''
@@ -257,7 +260,7 @@ const ChatContent: React.FC = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-      <div className={styles.head}>{title}</div>
+      {/* <div className={styles.head}>{title}</div> */}
       {/* 消息记录区域，手工纸浆质感 */}
       <div className={styles.chatMessages} id="chatMessages">
         <Scrollbars

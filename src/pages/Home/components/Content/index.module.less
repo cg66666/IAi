@@ -33,14 +33,14 @@
 
 /* ===== 聊天头部: PC端隐藏，移动端显示 ===== */
 .chatHeader {
-  padding: 18px 28px;
+  height: 109.5px;
+  // padding: 17.2px 28px;
   border-bottom: 2px solid #d4a373;
   background: #fff3e0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   position: relative;
-
   &::before {
     content: '';
     position: absolute;
@@ -54,35 +54,54 @@
     filter: blur(2px);
   }
 
-  h2 {
-    font-size: 1.5rem;
-    font-weight: 450;
-    color: #6b2e0c;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 0;
-    font-family: 'Georgia', serif;
-    text-shadow: 1px 2px 0 #fed7aa;
-
-    span {
-      background: #fef3c7; /* 米黄编织 */
-      color: #92400e;
-      font-size: 0.8rem;
-      padding: 6px 16px;
-      border-radius: 30px 10px 30px 10px;
-      margin-left: 12px;
-      border: 1px solid #e3a56d;
-      box-shadow:
-        inset 2px 2px 4px #ffe3ba,
-        3px 3px 0 #bb7a4a;
-      font-style: italic;
-    }
+  .title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #7b341e;
+    font-size: 1.3rem;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+    overflow: hidden;
+    font-style: italic;
+    text-shadow: 2px 2px 0 rgba(245, 158, 11, 0.1);
+    position: relative;
   }
+
+  // h2 {
+  //   font-size: 1.5rem;
+  //   font-weight: 450;
+  //   color: #6b2e0c;
+  //   display: flex;
+  //   align-items: center;
+  //   gap: 8px;
+  //   margin: 0;
+  //   font-family: 'Georgia', serif;
+  //   text-shadow: 1px 2px 0 #fed7aa;
+
+  //   span {
+  //     background: #fef3c7; /* 米黄编织 */
+  //     color: #92400e;
+  //     font-size: 0.8rem;
+  //     padding: 6px 16px;
+  //     border-radius: 30px 10px 30px 10px;
+  //     margin-left: 12px;
+  //     border: 1px solid #e3a56d;
+  //     box-shadow:
+  //       inset 2px 2px 4px #ffe3ba,
+  //       3px 3px 0 #bb7a4a;
+  //     font-style: italic;
+  //   }
+  // }
 }
 
 /* 移动端按钮 */
 .mobileToggleBtn {
+  left: 10px;
+  height: 50%;
+  transform: translateY(-50%);
+  position: absolute;
   display: flex;
   background: #ebc28e;
   border: 2px solid #9c5e2c;
@@ -94,7 +113,6 @@
   justify-content: center;
   cursor: pointer;
   color: #5a3117;
-  margin-right: 8px;
   flex-shrink: 0;
   box-shadow: 4px 5px 0 #9a6a3d;
   transform: rotate(-1deg);
@@ -102,18 +120,18 @@
 
 /* PC端（宽度>700px）隐藏chatHeader */
 @media (min-width: 701px) {
-  .chatHeader {
-    display: none !important;
-  }
+  // .chatHeader {
+  //   display: none !important;
+  // }
 
   .mobileToggleBtn {
     display: none !important;
   }
 }
 
-/* 移动端显示chatHeader (已经在上面CSS中定义) */
-@media (max-width: 700px) {
-  .chatHeader {
-    display: flex !important;
-  }
-}
+// /* 移动端显示chatHeader (已经在上面CSS中定义) */
+// @media (max-width: 700px) {
+//   .chatHeader {
+//     display: flex !important;
+//   }
+// }
