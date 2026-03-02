@@ -1,0 +1,485 @@
+.historySidebar {
+  background: #fef7e9; /* 米白手造纸 */
+  border-right: 2px solid #e5c9a7; /* 做旧皮革色 */
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition:
+    width 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    transform 0.35s ease;
+  position: relative;
+  flex-shrink: 0;
+  z-index: 20;
+  width: 280px; /* 展开宽度 (略微加宽，更有手写感) */
+  box-shadow: 8px 4px 16px rgba(100, 50, 10, 0.08);
+  /* 手工纸边缘不规则的线 */
+  border-left: 1px solid #e8d6b5;
+  border-bottom: 1px solid #dcc29e;
+  /* 粗糙纹理 */
+  background-image:
+    linear-gradient(165deg, rgba(245, 158, 11, 0.02) 0%, transparent 40%),
+    repeating-linear-gradient(
+      0deg,
+      rgba(146, 64, 14, 0.02) 0px,
+      rgba(146, 64, 14, 0.02) 1px,
+      transparent 1px,
+      transparent 6px
+    );
+
+  &.collapsed {
+    width: 68px; /* 收起更宽一点，容纳手工痕迹 */
+    border-right: 2px solid #d4af7a;
+  }
+
+  .emptyText {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    margin: 20px;
+    text-align: center;
+    color: #7b341e;
+    font-style: italic;
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 1.5;
+    background: radial-gradient(circle at 50% 50%, rgba(146, 64, 14, 0.25) 0%, transparent 80%);
+    border-radius: 20px;
+    box-shadow: inset 0 0 20px rgba(150, 80, 20, 0.15);
+    cursor: pointer;
+  }
+}
+
+.newChatContainer {
+  padding: 16px 16px 10px 16px;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  transition:
+    opacity 0.2s,
+    padding 0.2s;
+
+  .collapsed & {
+    padding: 16px 8px 10px 8px;
+  }
+}
+
+.newChatBtn {
+  background: #e8d5b0; /* 未烧制陶土色 */
+  border: 2px dashed #a87b50; /* 虚线缝合感 */
+  border-radius: 30px 10px 30px 10px;
+  width: 100%;
+  padding: 12px 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #5d3a1a;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 4px 4px 0 #c4a480;
+  font-family: 'Georgia', serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-image: linear-gradient(145deg, #f0e0c5, #e0cdaf);
+  transform: rotate(-0.2deg);
+  white-space: nowrap;
+  overflow: hidden;
+
+  &:hover {
+    background: #f5e6d0;
+    transform: scale(1.02) rotate(0.2deg);
+    box-shadow: 2px 2px 0 #a87b50;
+    border-style: solid;
+  }
+
+  .icon {
+    font-size: 1.2rem;
+    line-height: 1;
+  }
+
+  .text {
+    transition: opacity 0.2s;
+  }
+
+  .collapsed & .text {
+    display: none;
+  }
+
+  .collapsed & {
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border-radius: 50%;
+    justify-content: center;
+  }
+}
+
+.historyHeader {
+  padding: 22px 14px 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px dashed #d4a373; /* 手撕虚线感 */
+  flex-shrink: 0;
+  width: 100%;
+  background: rgba(254, 243, 199, 0.4); /* 米黄晕染 */
+
+  .title {
+    font-weight: 400;
+    color: #7b341e; /* 深褐色 */
+    font-size: 1.3rem;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+    overflow: hidden;
+    font-style: italic;
+    text-shadow: 2px 2px 0 rgba(245, 158, 11, 0.1);
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 2px;
+      width: 70%;
+      height: 1px;
+      background: #92400e;
+      opacity: 0.3;
+      border-radius: 2px;
+    }
+  }
+
+  .collapsed & .title {
+    opacity: 0;
+    width: 0;
+  }
+}
+
+.toggleSidebarBtn {
+  background: #fde6c4; /* 陶土坯色 */
+  border: 2px solid #b45309; /* 烧制褐 */
+  border-radius: 40% 60% 40% 60% / 50% 40% 60% 50%; /* 有机圆角 */
+  width: 42px;
+  height: 42px;
+  font-size: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #7b341e;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+  box-shadow: 3px 4px 0 #b87c4b;
+  line-height: 1;
+  margin-left: auto;
+  transform: rotate(0deg);
+  /* 手敲纹理 */
+  background-image: radial-gradient(circle at 30% 40%, rgba(220, 38, 38, 0.1) 0%, transparent 40%);
+
+  &:hover {
+    background: #f5c99a;
+    transform: scale(0.97) rotate(-2deg);
+    box-shadow: 1px 2px 0 #92400e;
+  }
+}
+
+.collapsed {
+  .historyHeader {
+    padding: 22px 12px;
+    justify-content: center;
+  }
+
+  .historyList {
+    display: none;
+  }
+
+  .loginSection {
+    padding: 16px 6px;
+    text-align: center;
+
+    .userProfile {
+      padding: 8px 4px;
+      justify-content: center;
+
+      .userName {
+        display: none;
+      }
+
+      .logoutIcon {
+        margin-left: 0;
+      }
+    }
+
+    .userProfile .userName {
+      display: none;
+    }
+
+    .logoutIcon {
+      margin-left: 0;
+    }
+  }
+}
+
+.historyList {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 16px 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.historyItem {
+  padding: 14px 18px;
+  background: #fcf3e6;
+  border-radius: 30px 12px 30px 12px; /* 完全不规则，像手撕纸条 */
+  font-size: 1rem;
+  color: #3e1f0e;
+  border: 1px solid #e7b88b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: all 0.18s;
+  cursor: pointer;
+  box-shadow: 4px 5px 0 #c99a6b;
+  font-family: 'Georgia', serif;
+  background-image: linear-gradient(145deg, #fff2d8 0%, #fce5c7 100%);
+  transform: rotate(0.2deg);
+  position: relative;
+
+  &:hover {
+    background: #fce5c1;
+    transform: scale(1.01) rotate(-0.3deg);
+    box-shadow: 6px 7px 0 #b87c4b;
+    border-color: #b45309;
+  }
+
+  &.active {
+    background: #e9c49a; /* 深陶土色，明显区别于默认 */
+    border: 2px solid #b45309; /* 加粗边框，烧制褐色 */
+    color: #271505; /* 更深沉的文字色 */
+    box-shadow:
+      6px 8px 0 #8b5a2b,
+      /* 右侧厚重阴影，立起感觉 */ inset 0 0 0 3px #fef1d6; /* 内嵌亮边，仿手刻凹印 */
+    transform: scale(1.02) rotate(-0.5deg);
+    font-weight: 600; /* 加粗文字 */
+    text-shadow: 1px 1px 0 #fee3b8; /* 浅色压印 */
+    border-left-width: 5px; /* 左侧加重强调 */
+    z-index: 3;
+  }
+}
+
+.loginSection {
+  padding: 20px 16px 24px 16px;
+  border-top: 3px double #b88a5d; /* 双线缝制感 */
+  background: #f5e2ce;
+  margin-top: auto; /* 推到底部 */
+  transition: all 0.2s;
+  box-shadow: inset 0 8px 12px -8px rgba(150, 80, 20, 0.2);
+  background-image: radial-gradient(
+    circle at 10% 20%,
+    rgba(245, 158, 11, 0.05) 0%,
+    transparent 50%
+  );
+}
+
+.loginBtn {
+  background: #dc993a; /* 琥珀主色 */
+  border: 2px solid #92400e;
+  border-radius: 40px 12px 40px 12px;
+  padding: 12px 18px;
+  width: 100%;
+  font-size: 1.1rem;
+  font-weight: 550;
+  color: #2f1809;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 5px 5px 0 #a45822;
+  font-family: 'Georgia', serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-image: linear-gradient(145deg, #f7b731, #e39c1b);
+  border-bottom: 3px solid #b45d15;
+  transform: rotate(-0.2deg);
+
+  &:hover {
+    background: #f0a830;
+    transform: scale(0.98) rotate(0.3deg);
+    box-shadow: 2px 2px 0 #7b441c;
+  }
+}
+
+.userProfile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #eedbc5;
+  border-radius: 60px 16px 60px 16px;
+  padding: 8px 16px 8px 12px;
+  border: 2px solid #bb7e48;
+  box-shadow: 4px 4px 0 #9b6b3d;
+  background-image: linear-gradient(145deg, #f7e5d2, #e9d0b5);
+}
+
+.userAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50% 30% 50% 30%;
+  background: #a35c27;
+  background-image: radial-gradient(circle at 40% 35%, #f7c894, #9f551c);
+  border: 2px solid #fed7aa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fef3c7;
+  font-size: 1.4rem;
+  font-weight: 400;
+  box-shadow:
+    inset -2px -2px 4px #60381b,
+    2px 3px 0 #78471e;
+  flex-shrink: 0;
+}
+
+.userName {
+  font-size: 1.1rem;
+  color: #4b2c12;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+  font-family: 'Georgia', serif;
+  border-bottom: 1px dashed #c1854b;
+  padding-bottom: 2px;
+}
+
+.logoutIcon {
+  margin-left: auto;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #963e0e;
+  padding: 6px;
+  border-radius: 50%;
+  transition: 0.1s;
+  flex-shrink: 0;
+
+  &:hover {
+    background: #d4a373;
+    color: #4f2a0c;
+  }
+}
+
+.loginModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(80, 45, 20, 0.5);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  transition: 0.2s;
+}
+
+.modalContent {
+  background: #fcf0e0;
+  padding: 32px 28px;
+  border-radius: 80px 20px 80px 20px;
+  border: 4px solid #b17a48;
+  box-shadow: 16px 16px 0 #764a22;
+  max-width: 360px;
+  width: 90%;
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(200, 140, 70, 0.03) 0px,
+    rgba(200, 140, 70, 0.03) 8px,
+    transparent 8px,
+    transparent 16px
+  );
+}
+
+.modalContent h3 {
+  color: #633711;
+  font-size: 1.8rem;
+  font-weight: 400;
+  border-bottom: 2px solid #ba8759;
+  padding-bottom: 8px;
+  margin-bottom: 24px;
+  font-family: 'Georgia', serif;
+  text-align: center;
+}
+
+.modalInput {
+  width: 100%;
+  padding: 14px 18px;
+  background: #fffaf2;
+  border: 3px solid #bc804c;
+  border-radius: 40px 8px 40px 8px;
+  font-size: 1rem;
+  margin-bottom: 24px;
+  outline: none;
+  font-family: 'Georgia', serif;
+  color: #3a240b;
+  box-shadow:
+    inset 2px 2px 10px #ebd3b5,
+    4px 4px 0 #9f6d40;
+}
+
+.modalButtons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.modalBtn {
+  background: #fadbad;
+  border: 2px solid #9b601f;
+  border-radius: 30px 8px 30px 8px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #3b210a;
+  cursor: pointer;
+  box-shadow: 5px 5px 0 #a66831;
+  transition: 0.15s;
+  flex: 1;
+  font-family: 'Georgia', serif;
+
+  &.primary {
+    background: #92400e;
+    color: #fff0d6;
+    border-color: #64300c;
+    box-shadow: 5px 5px 0 #543117;
+  }
+
+  &:hover {
+    transform: scale(0.96);
+    box-shadow: 2px 2px 0 #7b4a20;
+  }
+}
+
+/* PC端（宽度>700px）隐藏chatHeader */
+@media (min-width: 701px) {
+  .chatHeader {
+    display: none !important;
+  }
+
+  .mobileToggleBtn {
+    display: none !important;
+  }
+}
+
+/* 移动端显示chatHeader (已经在上面CSS中定义) */
+@media (max-width: 700px) {
+  .chatHeader {
+    display: flex !important;
+  }
+}

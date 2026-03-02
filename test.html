@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>手作流语 · 匠人工坊</title>
+  <style>
+    /* ----- 全局重置 & 手工艺术变量 ----- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', '宋体', system-ui, -apple-system, serif;
+      background: #FDF3E0;  /* 旧纸底色 */
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      display: flex;
+      /* 手工纸张纹理 (亚麻质感) */
+      background-image: 
+        radial-gradient(circle at 30% 40%, rgba(245, 158, 11, 0.03) 0%, transparent 25%),
+        radial-gradient(circle at 80% 70%, rgba(146, 64, 14, 0.03) 0%, transparent 30%),
+        repeating-linear-gradient(45deg, rgba(180, 130, 70, 0.02) 0px, rgba(180, 130, 70, 0.02) 2px, 
+                                  rgba(240, 200, 140, 0.02) 2px, rgba(240, 200, 140, 0.02) 6px);
+    }
+
+    /* ----- 历史侧边栏 (手工皮纸质感) ----- */
+    .history-sidebar {
+      background: #FEF7E9;  /* 米白手造纸 */
+      border-right: 2px solid #E5C9A7;  /* 做旧皮革色 */
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: width 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.35s ease;
+      position: relative;
+      flex-shrink: 0;
+      z-index: 20;
+      width: 280px;               /* 展开宽度 */
+      box-shadow: 8px 4px 16px rgba(100, 50, 10, 0.08);
+      border-left: 1px solid #E8D6B5;
+      border-bottom: 1px solid #DCC29E;
+      background-image: 
+        linear-gradient(165deg, rgba(245, 158, 11, 0.02) 0%, transparent 40%),
+        repeating-linear-gradient(0deg, rgba(146, 64, 14, 0.02) 0px, rgba(146, 64, 14, 0.02) 1px,
+                                  transparent 1px, transparent 6px);
+    }
+
+    .history-sidebar.collapsed {
+      width: 68px;
+      border-right: 2px solid #D4AF7A;
+    }
+
+    /* 侧栏内部 */
+    .history-header {
+      padding: 22px 14px 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px dashed #D4A373;
+      flex-shrink: 0;
+      width: 100%;
+      background: rgba(254, 243, 199, 0.4);
+    }
+
+    .history-header .title {
+      font-weight: 400;
+      color: #7B341E;
+      font-size: 1.3rem;
+      letter-spacing: 1px;
+      white-space: nowrap;
+      transition: opacity 0.2s;
+      overflow: hidden;
+      font-style: italic;
+      text-shadow: 2px 2px 0 rgba(245, 158, 11, 0.1);
+      position: relative;
+    }
+    .history-header .title::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 2px;
+      width: 70%;
+      height: 1px;
+      background: #92400E;
+      opacity: 0.3;
+      border-radius: 2px;
+    }
+
+    .collapsed .history-header .title {
+      opacity: 0;
+      width: 0;
+    }
+
+    /* 折叠/展开按钮 */
+    .toggle-sidebar-btn {
+      background: #FDE6C4;
+      border: 2px solid #B45309;
+      border-radius: 40% 60% 40% 60% / 50% 40% 60% 50%;
+      width: 42px;
+      height: 42px;
+      font-size: 1.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #7B341E;
+      transition: all 0.25s ease;
+      flex-shrink: 0;
+      box-shadow: 3px 4px 0 #B87C4B;
+      line-height: 1;
+      margin-left: auto;
+      transform: rotate(0deg);
+      background-image: radial-gradient(circle at 30% 40%, rgba(220, 38, 38, 0.1) 0%, transparent 40%);
+    }
+    .toggle-sidebar-btn:hover {
+      background: #F5C99A;
+      transform: scale(0.97) rotate(-2deg);
+      box-shadow: 1px 2px 0 #92400E;
+    }
+
+    .collapsed .history-header {
+      padding: 22px 12px;
+      justify-content: center;
+    }
+
+    /* ===== 新增：新对话按钮区域 ===== */
+    .new-chat-container {
+      padding: 16px 16px 10px 16px;
+      flex-shrink: 0;
+      display: flex;
+      justify-content: center;
+      transition: opacity 0.2s, padding 0.2s;
+    }
+    
+    .collapsed .new-chat-container {
+      padding: 16px 8px 10px 8px;
+    }
+
+    .new-chat-btn {
+      background: #E8D5B0;       /* 未烧制陶土色 */
+      border: 2px dashed #A87B50; /* 虚线缝合感 */
+      border-radius: 30px 10px 30px 10px;
+      width: 100%;
+      padding: 12px 0;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #5D3A1A;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 4px 4px 0 #C4A480;
+      font-family: 'Georgia', serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background-image: linear-gradient(145deg, #F0E0C5, #E0CDAF);
+      transform: rotate(-0.2deg);
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .new-chat-btn:hover {
+      background: #F5E6D0;
+      transform: scale(1.02) rotate(0.2deg);
+      box-shadow: 2px 2px 0 #A87B50;
+      border-style: solid;
+    }
+
+    .new-chat-btn span.icon {
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
+    .new-chat-btn span.text {
+      transition: opacity 0.2s;
+    }
+
+    .collapsed .new-chat-btn span.text {
+      display: none;
+    }
+    
+    .collapsed .new-chat-btn {
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      border-radius: 50%;
+      justify-content: center;
+    }
+
+    /* 历史条目容器 */
+    .history-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 16px 24px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* 基础历史条目样式 */
+    .history-item {
+      padding: 14px 18px;
+      background: #FCF3E6;
+      border-radius: 30px 12px 30px 12px;
+      font-size: 1.0rem;
+      color: #3E1F0E;
+      border: 1px solid #E7B88B;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: all 0.18s;
+      cursor: pointer;
+      box-shadow: 4px 5px 0 #C99A6B;
+      font-family: 'Georgia', serif;
+      background-image: linear-gradient(145deg, #FFF2D8 0%, #FCE5C7 100%);
+      transform: rotate(0.2deg);
+      position: relative;
+    }
+    .history-item:hover {
+      background: #FCE5C1;
+      transform: scale(1.01) rotate(-0.3deg);
+      box-shadow: 6px 7px 0 #B87C4B;
+      border-color: #B45309;
+    }
+
+    /* ===== ✅ 优化后的选中样式：更醒目，更匠气 ===== */
+    .history-item.active {
+      background: #E9C49A;                /* 深陶土色，明显区别于默认 */
+      border: 2px solid #B45309;           /* 加粗边框，烧制褐色 */
+      color: #271505;                      /* 更深沉的文字色 */
+      box-shadow: 
+        6px 8px 0 #8B5A2B,                 /* 右侧厚重阴影，立起感觉 */
+        inset 0 0 0 3px #FEF1D6;            /* 内嵌亮边，仿手刻凹印 */
+      transform: scale(1.02) rotate(-0.5deg);
+      font-weight: 600;                     /* 加粗文字 */
+      text-shadow: 1px 1px 0 #FEE3B8;       /* 浅色压印 */
+      border-left-width: 5px;                /* 左侧加重强调 */
+      z-index: 3;
+    }
+
+    /* ===== 新增：历史记录为空或未登录时的提示样式 ===== */
+    .history-placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        padding: 20px;
+        text-align: center;
+        color: #92400E;
+        font-style: italic;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        /* 添加一个微妙的背景效果 */
+        background: 
+            radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.03) 0%, transparent 80%);
+    }
+
+    /* 兼容侧边栏收起时隐藏历史列表，无需显示 */
+    .collapsed .history-list {
+      display: none;
+    }
+
+    /* ===== 左下角登录区域 ===== */
+    .login-section {
+      padding: 20px 16px 24px 16px;
+      border-top: 3px double #B88A5D;
+      background: #F5E2CE;
+      margin-top: auto;
+      transition: all 0.2s;
+      box-shadow: inset 0 8px 12px -8px rgba(150, 80, 20, 0.2);
+      background-image: radial-gradient(circle at 10% 20%, rgba(245, 158, 11, 0.05) 0%, transparent 50%);
+    }
+
+    .collapsed .login-section {
+      padding: 16px 6px;
+      text-align: center;
+    }
+
+    .login-btn {
+      background: #DC993A;
+      border: 2px solid #92400E;
+      border-radius: 40px 12px 40px 12px;
+      padding: 12px 18px;
+      width: 100%;
+      font-size: 1.1rem;
+      font-weight: 550;
+      color: #2F1809;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 5px 5px 0 #A45822;
+      font-family: 'Georgia', serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background-image: linear-gradient(145deg, #F7B731, #E39C1B);
+      border-bottom: 3px solid #B45D15;
+      transform: rotate(-0.2deg);
+    }
+    .login-btn:hover {
+      background: #F0A830;
+      transform: scale(0.98) rotate(0.3deg);
+      box-shadow: 2px 2px 0 #7B441C;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #EEDBC5;
+      border-radius: 60px 16px 60px 16px;
+      padding: 8px 16px 8px 12px;
+      border: 2px solid #BB7E48;
+      box-shadow: 4px 4px 0 #9B6B3D;
+      background-image: linear-gradient(145deg, #F7E5D2, #E9D0B5);
+    }
+    .collapsed .user-profile {
+      padding: 8px 4px;
+      justify-content: center;
+    }
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50% 30% 50% 30%;
+      background: #A35C27;
+      background-image: radial-gradient(circle at 40% 35%, #F7C894, #9F551C);
+      border: 2px solid #FED7AA;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FEF3C7;
+      font-size: 1.4rem;
+      font-weight: 400;
+      box-shadow: inset -2px -2px 4px #60381B, 2px 3px 0 #78471E;
+      flex-shrink: 0;
+    }
+    .user-name {
+      font-size: 1.1rem;
+      color: #4B2C12;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 120px;
+      font-family: 'Georgia', serif;
+      border-bottom: 1px dashed #C1854B;
+      padding-bottom: 2px;
+    }
+    .collapsed .user-name {
+      display: none;
+    }
+    .logout-icon {
+      margin-left: auto;
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: #963E0E;
+      padding: 6px;
+      border-radius: 50%;
+      transition: 0.1s;
+      flex-shrink: 0;
+    }
+    .logout-icon:hover {
+      background: #D4A373;
+      color: #4F2A0C;
+    }
+    .collapsed .logout-icon {
+      margin-left: 0;
+    }
+
+    /* 登录模态框 */
+    .login-modal {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(80, 45, 20, 0.5);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      transition: 0.2s;
+    }
+    .modal-content {
+      background: #FCF0E0;
+      padding: 32px 28px;
+      border-radius: 80px 20px 80px 20px;
+      border: 4px solid #B17A48;
+      box-shadow: 16px 16px 0 #764A22;
+      max-width: 360px;
+      width: 90%;
+      background-image: repeating-linear-gradient(45deg, rgba(200, 140, 70, 0.03) 0px, rgba(200, 140, 70, 0.03) 8px, transparent 8px, transparent 16px);
+    }
+    .modal-content h3 {
+      color: #633711;
+      font-size: 1.8rem;
+      font-weight: 400;
+      border-bottom: 2px solid #BA8759;
+      padding-bottom: 8px;
+      margin-bottom: 24px;
+      font-family: 'Georgia', serif;
+      text-align: center;
+    }
+    .modal-input {
+      width: 100%;
+      padding: 14px 18px;
+      background: #FFFAF2;
+      border: 3px solid #BC804C;
+      border-radius: 40px 8px 40px 8px;
+      font-size: 1rem;
+      margin-bottom: 24px;
+      outline: none;
+      font-family: 'Georgia', serif;
+      color: #341D0C;
+      box-shadow: inset 2px 2px 10px #EBD3B5, 4px 4px 0 #9F6D40;
+    }
+    .modal-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+    }
+    .modal-btn {
+      background: #FADBAD;
+      border: 2px solid #9B601F;
+      border-radius: 30px 8px 30px 8px;
+      padding: 12px 24px;
+      font-size: 1.0rem;
+      font-weight: bold;
+      color: #3B210A;
+      cursor: pointer;
+      box-shadow: 5px 5px 0 #A66831;
+      transition: 0.15s;
+      flex: 1;
+      font-family: 'Georgia', serif;
+    }
+    .modal-btn.primary {
+      background: #92400E;
+      color: #FFF0D6;
+      border-color: #64300C;
+      box-shadow: 5px 5px 0 #543117;
+    }
+    .modal-btn:hover {
+      transform: scale(0.96);
+      box-shadow: 2px 2px 0 #7B4A20;
+    }
+
+    /* ----- 主聊天区域 ----- */
+    .main-chat {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #FCF5E8;
+      height: 100vh;
+      width: 100%;
+      transition: width 0.25s ease;
+      position: relative;
+      min-width: 0;
+      background-image: 
+        radial-gradient(circle at 20% 30%, rgba(5, 150, 105, 0.02) 0%, transparent 25%),
+        repeating-linear-gradient(0deg, rgba(180, 130, 60, 0.02) 0px, rgba(180, 130, 60, 0.02) 2px, transparent 2px, transparent 8px);
+    }
+
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      width: 100%;
+      background: #FFFCF3;
+      border-radius: 0;
+      box-shadow: none;
+      border-left: 3px solid #DAB98C;
+    }
+
+    .chat-header {
+      padding: 18px 28px;
+      border-bottom: 2px solid #D4A373;
+      background: #FFF3E0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+    }
+    .chat-header::before {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 30px;
+      width: 80px;
+      height: 6px;
+      background: #DC2626;
+      opacity: 0.25;
+      border-radius: 10px;
+      filter: blur(2px);
+    }
+    .chat-header h2 {
+      font-size: 1.5rem;
+      font-weight: 450;
+      color: #6B2E0C;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+      font-family: 'Georgia', serif;
+      text-shadow: 1px 2px 0 #FED7AA;
+    }
+    .chat-header h2 span {
+      background: #FEF3C7;
+      color: #92400E;
+      font-size: 0.8rem;
+      padding: 6px 16px;
+      border-radius: 30px 10px 30px 10px;
+      margin-left: 12px;
+      border: 1px solid #E3A56D;
+      box-shadow: inset 2px 2px 4px #ffe3ba, 3px 3px 0 #BB7A4A;
+      font-style: italic;
+    }
+
+    @media (min-width: 701px) {
+      .chat-header {
+        display: none !important;
+      }
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 28px 28px 20px 28px;
+      background: #FCF5E8;
+      scroll-behavior: smooth;
+      background-image: 
+        radial-gradient(circle at 10% 30%, #FDE6C4 0%, transparent 25%),
+        repeating-linear-gradient(45deg, rgba(146, 64, 14, 0.02) 0px, rgba(146, 64, 14, 0.02) 4px, transparent 4px, transparent 12px);
+    }
+
+    .message {
+      display: flex;
+      margin-bottom: 28px;
+      animation: handRise 0.4s ease-out;
+    }
+    .message.user {
+      justify-content: flex-end;
+    }
+    .bubble {
+      max-width: 74%;
+      padding: 14px 20px;
+      border-radius: 40px 20px 40px 20px;
+      font-size: 1.0rem;
+      line-height: 1.6;
+      word-wrap: break-word;
+      box-shadow: 6px 6px 0 #C4A27A;
+      border: 1px solid #C08F63;
+      background-clip: padding-box;
+      position: relative; /* 为内部的token-info提供定位上下文 */
+    }
+    .assistant .bubble {
+      background: #FFF8E7;
+      border: 1px solid #B68B65;
+      border-top-left-radius: 8px;
+      color: #3A240B;
+      background-image: linear-gradient(145deg, #FFF2DD, #FFEED9);
+      box-shadow: 5px 6px 0 #A77B53;
+      padding-bottom: 26px; /* 为下方的token-info留出空间 */
+    }
+    .user .bubble {
+      background: #92400E;
+      color: #FFEDD5;
+      border-top-right-radius: 8px;
+      border: 1px solid #B45F2A;
+      background-image: linear-gradient(135deg, #9A4D1E, #7A380A);
+      box-shadow: 5px 7px 0 #6B3416;
+    }
+
+    .message-content {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .text-fragment {
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: 'Georgia', serif;
+    }
+    .msg-table {
+      border-collapse: separate;
+      border-spacing: 0;
+      width: 100%;
+      font-size: 0.95rem;
+      margin: 8px 0 4px;
+      background: #FDF1E0;
+      border-radius: 20px 8px 20px 8px;
+      overflow: hidden;
+      border: 1px solid #C5A071;
+      box-shadow: 5px 6px 0 #AD825B;
+    }
+    .msg-table th {
+      background: #E7CAA5;
+      font-weight: 500;
+      color: #4B2C13;
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 2px solid #B88D5F;
+      font-family: 'Georgia', serif;
+      letter-spacing: 0.5px;
+    }
+    .msg-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #DDBB93;
+      background: #FFF7E9;
+    }
+    .msg-table tr:last-child td {
+      border-bottom: none;
+    }
+    pre {
+      background: #302418;
+      color: #FDE9C9;
+      padding: 18px 20px;
+      border-radius: 24px 6px 24px 6px;
+      font-family: 'Courier New', 'Fira Code', monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      margin: 8px 0 2px;
+      border-left: 6px solid #C96F2D;
+      box-shadow: 8px 8px 0 #4E3A28;
+      background-image: repeating-linear-gradient(45deg, #3F2E1F 0px, #3F2E1F 2px, #553D28 2px, #553D28 6px);
+    }
+
+    /* ===== 修改：Token消耗提示样式，定位在气泡内部右下角 ===== */
+    .token-info {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      font-size: 0.7rem; /* 稍微小一点 */
+      color: #A87B50;
+      text-align: right;
+      font-style: italic;
+      font-family: 'Georgia', serif;
+      background-color: rgba(255, 255, 255, 0.7); /* 轻微背景色避免完全透明看不清 */
+      padding: 2px 6px; /* 小内边距 */
+      border-radius: 10px; /* 圆角 */
+      z-index: 10; /* 确保在内容之上 */
+    }
+
+    .input-area {
+      padding: 22px 28px 28px 28px;
+      background: #F5E8D4;
+      border-top: 4px solid #D6A47A;
+      display: flex;
+      gap: 16px;
+      align-items: flex-end;
+      box-shadow: 0 -8px 12px rgba(150, 70, 20, 0.06);
+      position: relative;
+    }
+    .input-area::after {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: 40px;
+      width: 140px;
+      height: 10px;
+      background: #DC2626;
+      opacity: 0.2;
+      border-radius: 10px;
+      filter: blur(4px);
+    }
+
+    .input-wrapper {
+      flex: 1;
+      background: #FFF5E6;
+      border: 3px solid #BD8A5A;
+      border-radius: 50px 8px 50px 8px;
+      padding: 8px 24px;
+      transition: border 0.2s, box-shadow 0.2s;
+      box-shadow: inset 2px 2px 10px #EDDBC5, 4px 5px 0 #936F48;
+      min-width: 0;
+    }
+    .input-wrapper:focus-within {
+      border-color: #B45309;
+      box-shadow: inset 0 0 0 2px #FDE6C4, 5px 7px 0 #7A4A25;
+      background: #FFFAF2;
+    }
+
+    textarea {
+      width: 100%;
+      border: none;
+      background: transparent;
+      resize: none;
+      font-size: 1.05rem;
+      font-family: 'Georgia', serif;
+      padding: 12px 0;
+      max-height: 130px;
+      outline: none;
+      color: #3B250E;
+    }
+
+    .btn {
+      background: #FDE4C2;
+      border: 2px solid #9C641C;
+      border-radius: 40% 20% 40% 20%;
+      padding: 12px 24px;
+      font-size: 1.0rem;
+      color: #4F2E10;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 500;
+      box-shadow: 5px 5px 0 #BB7A44;
+      white-space: nowrap;
+      font-family: 'Georgia', serif;
+      background-image: radial-gradient(circle at 30% 35%, #FEF3C7, #FAD19E);
+      transform: rotate(-0.3deg);
+    }
+    .btn.send {
+      background: #92400E;
+      border-color: #6F3212;
+      color: #FEF1D6;
+      padding: 12px 32px;
+      flex-shrink: 0;
+      box-shadow: 6px 6px 0 #5F3419;
+      background-image: linear-gradient(145deg, #9F541F, #803B0D);
+      text-shadow: 0 1px 2px #3F1C05;
+    }
+    .btn.send:hover:not(:disabled) {
+      background: #AE551C;
+      transform: scale(0.97) rotate(0.3deg);
+      box-shadow: 3px 3px 0 #572E13;
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      filter: grayscale(20%);
+    }
+
+    @keyframes handRise {
+      0% { opacity: 0; transform: translateY(15px) rotate(-0.5deg); }
+      100% { opacity: 1; transform: translateY(0) rotate(0deg); }
+    }
+
+    /* ----- 移动端适配 ----- */
+    @media (max-width: 700px) {
+      body {
+        background: #EFDDC6;
+      }
+      .history-sidebar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        transform: translateX(0);
+        box-shadow: 10px 0 30px rgba(110, 50, 10, 0.25);
+        z-index: 100;
+        width: 280px;
+        transition: transform 0.3s ease;
+      }
+      .history-sidebar.collapsed {
+        transform: translateX(-100%);
+        width: 280px;
+        border-right: none;
+      }
+      .main-chat {
+        width: 100%;
+        flex: 1 1 100%;
+        max-width: 100%;
+      }
+      .mobile-toggle-btn {
+        display: flex !important;
+        background: #EBC28E;
+        border: 2px solid #9C5E2C;
+        border-radius: 50% 40% 60% 40%;
+        width: 48px;
+        height: 48px;
+        font-size: 2.0rem;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: #5A3117;
+        margin-right: 8px;
+        flex-shrink: 0;
+        box-shadow: 4px 5px 0 #9A6A3D;
+        transform: rotate(-1deg);
+      }
+
+      .chat-header {
+        display: flex !important;
+      }
+
+      .input-area {
+        padding: 16px 18px 22px 18px;
+        gap: 10px;
+      }
+      .btn.send {
+        padding: 12px 22px;
+      }
+      .chat-header h2 {
+        font-size: 1.3rem;
+      }
+    }
+
+    @media (min-width: 701px) {
+      .mobile-toggle-btn {
+        display: none !important;
+      }
+      .collapsed .history-header {
+        padding: 22px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 左侧历史侧边栏 -->
+  <aside id="historySidebar" class="history-sidebar">
+    <div class="history-header">
+      <div class="title">📜 历史记录</div>
+      <button id="toggleSidebarBtn" class="toggle-sidebar-btn">☰</button>
+    </div>
+
+    <!-- 新对话按钮 -->
+    <div class="new-chat-container">
+      <button id="newChatBtn" class="new-chat-btn">
+        <span class="icon">+</span>
+        <span class="text">新对话</span>
+      </button>
+    </div>
+
+    <!-- 历史记录列表 -->
+    <div class="history-list" id="historyList">
+      <!-- 历史记录项将通过JS动态填充或显示占位符 -->
+    </div>
+
+    <!-- 登录区域 -->
+    <div id="loginSection" class="login-section"></div>
+  </aside>
+
+  <!-- 主聊天区 -->
+  <main class="main-chat">
+    <div class="chat-container">
+      <div class="chat-header">
+        <h2>✨ 当前对话 <span>匠人工坊</span></h2>
+        <button id="mobileToggleBtn" class="mobile-toggle-btn">☰</button>
+      </div>
+
+      <div id="chatMessages" class="chat-messages"></div>
+
+      <div class="input-area">
+        <div class="input-wrapper">
+          <textarea id="userInput" placeholder="在此输入你的手作灵感..."></textarea>
+        </div>
+        <button id="sendBtn" class="btn send">发 送</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- 登录模态框 -->
+  <div id="loginModal" class="login-modal" style="display:none;">
+    <div class="modal-content">
+      <h3>🔨 匠人登录</h3>
+      <input type="text" id="loginNameInput" class="modal-input" placeholder="请输入你的匠名" />
+      <div class="modal-buttons">
+        <button id="cancelLoginBtn" class="modal-btn">返 回</button>
+        <button id="confirmLoginBtn" class="modal-btn primary">进 工 坊</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // DOM
+      const historySidebar = document.getElementById('historySidebar');
+      const toggleBtn = document.getElementById('toggleSidebarBtn');
+      const mobileToggleBtn = document.getElementById('mobileToggleBtn');
+      const newChatBtn = document.getElementById('newChatBtn');
+      const historyList = document.getElementById('historyList');
+      const chatMessages = document.getElementById('chatMessages');
+      const userInput = document.getElementById('userInput');
+      const sendBtn = document.getElementById('sendBtn');
+      const loginSection = document.getElementById('loginSection');
+      const loginModal = document.getElementById('loginModal');
+      const loginNameInput = document.getElementById('loginNameInput');
+      const cancelLoginBtn = document.getElementById('cancelLoginBtn');
+      const confirmLoginBtn = document.getElementById('confirmLoginBtn');
+
+      // state
+      let isResponding = false;
+      let activeIntervals = new Set();
+      let abortCurrentResponse = false;
+      let currentMessageContentDiv = null;
+      let currentTokenInfoElement = null; // 追踪当前的token info元素
+
+      // 登录状态
+      let isLoggedIn = false;
+      let userName = '陶艺手艺人';
+
+      // 侧边栏状态
+      let isSidebarExpanded = true;
+
+      // 模拟历史记录数据
+      let historyRecords = [];
+
+      // ---------- 折叠逻辑 ----------
+      function updateSidebarState(expanded) {
+        if (expanded) {
+          historySidebar.classList.remove('collapsed');
+          toggleBtn.innerHTML = '☰';
+        } else {
+          historySidebar.classList.add('collapsed');
+          toggleBtn.innerHTML = '☰';
+        }
+        isSidebarExpanded = expanded;
+        renderLoginSection();
+        updateHistoryListDisplay(); // 更新历史列表显示
+      }
+
+      function toggleSidebar() {
+        updateSidebarState(!isSidebarExpanded);
+      }
+
+      toggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleSidebar();
+      });
+
+      mobileToggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (historySidebar.classList.contains('collapsed')) {
+          historySidebar.classList.remove('collapsed');
+          toggleBtn.innerHTML = '☰';
+        } else {
+          historySidebar.classList.add('collapsed');
+          toggleBtn.innerHTML = '☰';
+        }
+        isSidebarExpanded = !historySidebar.classList.contains('collapsed');
+        renderLoginSection();
+        updateHistoryListDisplay();
+      });
+
+      function setInitialSidebar() {
+        const isMobile = window.innerWidth <= 700;
+        if (isMobile) {
+          historySidebar.classList.add('collapsed');
+          isSidebarExpanded = false;
+        } else {
+          historySidebar.classList.remove('collapsed');
+          isSidebarExpanded = true;
+        }
+        renderLoginSection();
+        updateHistoryListDisplay();
+      }
+
+      window.addEventListener('resize', () => {
+        const isMobile = window.innerWidth <= 700;
+        if (isMobile && !historySidebar.classList.contains('collapsed')) {
+          historySidebar.classList.add('collapsed');
+          isSidebarExpanded = false;
+        } else if (!isMobile && historySidebar.classList.contains('collapsed')) {
+          historySidebar.classList.remove('collapsed');
+          isSidebarExpanded = true;
+        }
+        renderLoginSection();
+        updateHistoryListDisplay();
+      });
+
+      // ========== 历史项渲染与交互逻辑 ==========
+      function updateHistoryListDisplay() {
+        const collapsed = historySidebar.classList.contains('collapsed');
+        if (collapsed) {
+            historyList.innerHTML = ''; // 收起时不显示任何内容
+            return;
+        }
+
+        if (!isLoggedIn) {
+            // 未登录状态
+            historyList.innerHTML = `<div class="history-placeholder">请先登录以查看历史记录</div>`;
+        } else if (historyRecords.length === 0) {
+            // 已登录但无历史记录
+            historyList.innerHTML = `<div class="history-placeholder">暂无历史对话</div>`;
+        } else {
+            // 已登录且有历史记录
+            historyList.innerHTML = '';
+            historyRecords.forEach(record => {
+                const item = document.createElement('div');
+                item.classList.add('history-item');
+                item.textContent = record.title; // 假设每条记录有title属性
+                item.addEventListener('click', () => {
+                    // 移除所有 active
+                    historyList.querySelectorAll('.history-item').forEach(i => i.classList.remove('active'));
+                    // 添加当前 active
+                    item.classList.add('active');
+                    console.log('选中历史项:', record.title);
+                    // 这里可以添加加载历史对话的逻辑
+                });
+                historyList.appendChild(item);
+            });
+        }
+      }
+
+      // ========== 新对话按钮逻辑 ==========
+      newChatBtn.addEventListener('click', () => {
+        // 清除所有历史项的 active 状态
+        historyList.querySelectorAll('.history-item').forEach(i => i.classList.remove('active'));
+
+        if (isResponding) {
+          abortCurrentResponse = true;
+          clearAllTypingIntervals();
+        }
+        chatMessages.innerHTML = '';
+
+        setTimeout(() => {
+          addMessageBubble('assistant', '✨ 新的画布已铺开，匠人想创作些什么？');
+        }, 300);
+
+        // 移动端点击后自动收起侧栏
+        if (window.innerWidth <= 700) {
+          historySidebar.classList.add('collapsed');
+          isSidebarExpanded = false;
+          updateHistoryListDisplay();
+        }
+      });
+
+      // ========== 登录区域渲染 ==========
+      function renderLoginSection() {
+        const collapsed = historySidebar.classList.contains('collapsed');
+        if (!isLoggedIn) {
+          loginSection.innerHTML = 
+            `<button id="showLoginBtn" class="login-btn">
+              ${collapsed ? '🔑' : '🔨 登录 / 注册'}
+            </button>`;
+          const showLoginBtn = document.getElementById('showLoginBtn');
+          if (showLoginBtn) {
+            showLoginBtn.addEventListener('click', () => {
+              loginModal.style.display = 'flex';
+            });
+          }
+        } else {
+          const avatarLetter = userName.charAt(0) || '匠';
+          loginSection.innerHTML = 
+            `<div class="user-profile">
+              <div class="user-avatar">${avatarLetter}</div>
+              ${collapsed ? '' : `<div class="user-name">${userName}</div>`}
+              <button id="logoutBtn" class="logout-icon">↪︎</button>
+            </div>`;
+          const logoutBtn = document.getElementById('logoutBtn');
+          if (logoutBtn) {
+            logoutBtn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              isLoggedIn = false;
+              updateHistoryListDisplay(); // 登出后更新历史列表显示
+              renderLoginSection();
+            });
+          }
+        }
+      }
+
+      // 模态框事件
+      cancelLoginBtn.addEventListener('click', () => {
+        loginModal.style.display = 'none';
+      });
+      confirmLoginBtn.addEventListener('click', () => {
+        const inputName = loginNameInput.value.trim();
+        if (inputName) {
+          userName = inputName;
+        } else {
+          userName = '手作人';
+        }
+        isLoggedIn = true;
+        loginModal.style.display = 'none';
+        updateHistoryListDisplay(); // 登入后更新历史列表显示
+        renderLoginSection();
+      });
+      loginModal.addEventListener('click', (e) => {
+        if (e.target === loginModal) {
+          loginModal.style.display = 'none';
+        }
+      });
+
+      renderLoginSection();
+      updateHistoryListDisplay(); // 初始化历史列表显示
+
+      // ---------- 聊天逻辑 ----------
+      function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+      function clearAllTypingIntervals() { activeIntervals.forEach(id => clearInterval(id)); activeIntervals.clear(); }
+      function scrollToBottom() { setTimeout(() => { chatMessages.scrollTop = chatMessages.scrollHeight; }, 10); }
+      function setButtonsDisabled(disabled) {
+        sendBtn.disabled = disabled;
+      }
+
+      function addMessageBubble(sender, text = '') {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message', sender);
+        const bubble = document.createElement('div');
+        bubble.classList.add('bubble');
+        if (sender === 'assistant') {
+          const contentDiv = document.createElement('div');
+          contentDiv.className = 'message-content';
+          bubble.appendChild(contentDiv);
+
+          // 创建并添加Token信息元素到助手气泡内
+          const tokenInfo = document.createElement('div');
+          tokenInfo.className = 'token-info';
+          tokenInfo.style.display = 'none'; // 初始隐藏
+          bubble.appendChild(tokenInfo);
+          currentTokenInfoElement = tokenInfo; // 更新全局引用
+
+          messageDiv.appendChild(bubble);
+          chatMessages.appendChild(messageDiv);
+          scrollToBottom();
+          return contentDiv;
+        } else {
+          bubble.textContent = text;
+          messageDiv.appendChild(bubble);
+          chatMessages.appendChild(messageDiv);
+          scrollToBottom();
+          return null;
+        }
+      }
+
+      function createTable(headers, rows) {
+        const table = document.createElement('table'); table.className = 'msg-table';
+        const thead = document.createElement('thead'); const headerRow = document.createElement('tr');
+        headers.forEach(h => { const th = document.createElement('th'); th.textContent = h; headerRow.appendChild(th); });
+        thead.appendChild(headerRow); table.appendChild(thead);
+        const tbody = document.createElement('tbody');
+        rows.forEach(rowData => { const tr = document.createElement('tr'); rowData.forEach(cell => { const td = document.createElement('td'); td.textContent = cell; tr.appendChild(td); }); tbody.appendChild(tr); });
+        table.appendChild(tbody); return table;
+      }
+
+      function typeTextToElement(element, fullText) {
+        return new Promise((resolve) => {
+          element.textContent = '';
+          let index = 0;
+          const intervalId = setInterval(() => {
+            if (abortCurrentResponse) { clearInterval(intervalId); activeIntervals.delete(intervalId); resolve(); return; }
+            if (index < fullText.length) {
+              element.textContent += fullText[index++];
+              scrollToBottom();
+            } else {
+              clearInterval(intervalId);
+              activeIntervals.delete(intervalId);
+              resolve();
+            }
+          }, Math.random() * 30 + 20);
+        });
+      }
+
+      // 模拟计算Token消耗的函数 (实际应用中应由后端返回)
+      function calculateTokens(text) {
+          // 简单估算：中文字符按1个token，英文单词按1个token，标点符号忽略
+          // 实际情况非常复杂，这里仅为演示
+          const zhChars = text.match(/[\u4e00-\u9fa5]/g) || [];
+          const enWords = text.replace(/[\u4e00-\u9fa5\s\p{P}\p{S}]/gu, ' ').trim().split(/\s+/).filter(w => w.length > 0);
+          return zhChars.length + enWords.length;
+      }
+
+      async function startAssistantResponse(fragments) {
+        isResponding = true;
+        setButtonsDisabled(true);
+        abortCurrentResponse = false;
+
+        let totalTokens = 0;
+
+        for (const frag of fragments) {
+          if (abortCurrentResponse) break;
+          if (typeof frag === 'string') {
+            const div = document.createElement('div');
+            div.className = 'text-fragment';
+            currentMessageContentDiv.appendChild(div);
+            await typeTextToElement(div, frag);
+            totalTokens += calculateTokens(frag);
+          } else if (frag.type === 'table') {
+            const table = createTable(frag.headers, frag.rows);
+            currentMessageContentDiv.appendChild(table);
+            // 估算表格文本的Token
+            const tableText = [...frag.headers, ...frag.rows.flat()].join(' ');
+            totalTokens += calculateTokens(tableText);
+            scrollToBottom();
+          } else if (frag.type === 'code') {
+            const pre = document.createElement('pre');
+            pre.textContent = frag.code;
+            currentMessageContentDiv.appendChild(pre);
+            totalTokens += calculateTokens(frag.code);
+            scrollToBottom();
+          }
+          await sleep(300);
+        }
+
+        // 在助手气泡内显示Token消耗
+        if (currentTokenInfoElement) {
+            currentTokenInfoElement.textContent = `消耗 Tokens: ${totalTokens}`;
+            currentTokenInfoElement.style.display = 'block';
+        }
+
+        isResponding = false;
+        setButtonsDisabled(false);
+      }
+
+      const demoFragments1 = [
+        "你好！我是「手作流语」的 AI 助手，专为匠人打造。\n\n",
+        "我可以帮你：\n• 生成陶器烧制参数表\n• 编写木工 CNC 代码\n• 分析染料配比\n• 整理皮具打孔模板\n\n",
+        { type: 'table', headers: ['材料', '温度(℃)', '时长'], rows: [['粗陶', '1000', '8h'], ['瓷土', '1280', '12h']] },
+        "\n试试对我说：“帮我生成一个皮具打孔的 Python 脚本”"
+      ];
+
+      function sendUserMessage(text) {
+        if (!text.trim() || isResponding) return;
+        addMessageBubble('user', text);
+        userInput.value = '';
+        userInput.style.height = 'auto';
+        currentMessageContentDiv = addMessageBubble('assistant');
+        // 新的回复开始时，Token信息元素已被创建并附着在气泡上，初始为隐藏状态
+        startAssistantResponse(demoFragments1);
+      }
+
+      sendBtn.addEventListener('click', () => { sendUserMessage(userInput.value.trim() || '手作示例'); });
+      userInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendBtn.click(); } });
+      userInput.addEventListener('input', function() { this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px'; });
+
+      window.addEventListener('load', () => {
+        setInitialSidebar();
+        chatMessages.innerHTML = '';
+        setTimeout(() => {
+          addMessageBubble('user', '匠人你好，展示陶器与代码');
+          currentMessageContentDiv = addMessageBubble('assistant');
+          startAssistantResponse(demoFragments1);
+        }, 200);
+      });
+    })();
+  </script>
+</body>
+</html>
