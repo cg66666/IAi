@@ -3,7 +3,7 @@
  * @Author: cg
  * @Date: 2024-08-18 15:40:54
  * @LastEditors: cg
- * @LastEditTime: 2026-03-02 11:28:53
+ * @LastEditTime: 2026-03-02 17:08:15
  */
 import { notification } from 'antd'
 import axios, { AxiosError, type AxiosRequestConfig, type AxiosResponse } from 'axios'
@@ -36,7 +36,7 @@ export interface IData<T> {
   successful: boolean
 }
 export const instance = axios.create({
-  baseURL: `/${import.meta.env.VITE_PREFIX}`,
+  baseURL: `/${import.meta.env.VITE_PREFIX}/ai`,
   // baseURL: '/mobile_Vue3',
   timeout: 30 * 1000 // 统一设置超时时间
 })
