@@ -3,7 +3,7 @@
  * @Author: cg
  * @Date: 2026-02-24 22:12:47
  * @LastEditors: cg
- * @LastEditTime: 2026-03-02 15:23:21
+ * @LastEditTime: 2026-03-02 17:05:00
  */
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Scrollbars from 'react-custom-scrollbars'
@@ -79,8 +79,7 @@ const ChatContent: React.FC<IProps> = ({ setTitle }) => {
       if (!curChatId && !isAnonymity) {
         temChatId = nanoid(8)
       }
-
-      const res = await fetch('/ai/chat', {
+      const res = await fetch(`/${import.meta.env.VITE_PREFIX}/ai/chat`, {
         method: 'POST', // 必须使用 POST 方法，与后端对应
         headers: {
           'Content-Type': 'application/json',

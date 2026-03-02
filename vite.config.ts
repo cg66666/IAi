@@ -3,7 +3,7 @@
  * @Author: cg
  * @Date: 2026-02-18 00:54:03
  * @LastEditors: cg
- * @LastEditTime: 2026-03-02 16:51:20
+ * @LastEditTime: 2026-03-02 17:04:02
  */
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
@@ -23,10 +23,10 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       proxy: {
-        '/ai': {
+        '/AI/ai': {
           target: env.VITE_BASE_URL, // 真实接口地址, 后端给的基地址
-          changeOrigin: true // 允许跨域
-          // rewrite: (path) => path.replace(/^\/ai/, '')
+          changeOrigin: true, // 允许跨域
+          rewrite: (path) => path.replace(/^\/AI\/ai/, '/ai')
         }
       }
     },
