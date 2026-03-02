@@ -1,7 +1,7 @@
 .historySidebar {
   background: #fef7e9; /* 米白手造纸 */
   border-right: 2px solid #e5c9a7; /* 做旧皮革色 */
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   transition:
@@ -498,6 +498,7 @@
 @media (max-width: 700px) {
   .historySidebar {
     position: absolute;
+    // top: ;
     overflow: hidden;
     &.collapsed {
       width: 0px; /* 收起更宽一点，容纳手工痕迹 */
