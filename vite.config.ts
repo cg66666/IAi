@@ -3,7 +3,7 @@
  * @Author: cg
  * @Date: 2026-02-18 00:54:03
  * @LastEditors: cg
- * @LastEditTime: 2026-03-02 11:29:36
+ * @LastEditTime: 2026-03-02 15:40:38
  */
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
@@ -28,6 +28,9 @@ export default defineConfig(({ mode }) => {
           // rewrite: (path) => path.replace(/^\/ai/, '')
         }
       }
+    },
+    build: {
+      outDir: 'IAi'
     }
   }
 })
