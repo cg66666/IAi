@@ -3,7 +3,7 @@
  * @Author: cg
  * @Date: 2026-02-18 01:12:37
  * @LastEditors: cg
- * @LastEditTime: 2026-03-02 21:42:10
+ * @LastEditTime: 2026-03-03 14:11:10
  */
 import React, { useEffect, useRef, useState } from 'react'
 
@@ -22,9 +22,11 @@ const Home: React.FC = () => {
 
   const isSwiping = useRef(false)
 
+  const isMobil = useRef(window.innerWidth <= 700)
+
   const [startX, setStartX] = useState(0)
 
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(window.innerWidth <= 700)
 
   const toggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed)
@@ -32,6 +34,7 @@ const Home: React.FC = () => {
 
   const clickOutMenu = (e: any) => {
     if (
+      isMobil.current &&
       historySidebar.current &&
       !isSidebarCollapsed &&
       !historySidebar.current.contains(e.target)
@@ -41,7 +44,7 @@ const Home: React.FC = () => {
   }
 
   const onTouchStart = (e) => {
-    if (isSidebarCollapsed) return
+    if (isSidebarCollapsed && isMobil.current) return
     setStartX(e.touches[0].clientX)
     isSwiping.current = true
   }
@@ -66,6 +69,16 @@ const Home: React.FC = () => {
       getHistory()
     }
   }, [isAnonymity])
+
+  useEffect(() => {
+    window.addEventListener('resize', () => {
+      if (window.innerWidth <= 700) {
+        isMobil.current = true
+      } else {
+        isMobil.current = false
+      }
+    })
+  }, [])
 
   return (
     <div

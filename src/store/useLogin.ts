@@ -3,7 +3,7 @@
  * @Author: cg
  * @Date: 2024-11-20 16:16:46
  * @LastEditors: cg
- * @LastEditTime: 2026-03-02 11:29:48
+ * @LastEditTime: 2026-03-03 14:12:55
  */
 import { notification } from 'antd'
 import { nanoid } from 'nanoid'
@@ -36,7 +36,6 @@ export const useLoginStore = create<IState>((set, get) => ({
   checkLogin: async () => {
     const query = getQueryParams()
     const token = getCookie('ai-token')
-    console.log('token', token)
 
     // 判断是否ticket第一次登录后进入页面
     if (query.ticket) {
